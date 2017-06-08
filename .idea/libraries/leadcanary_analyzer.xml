@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="leadcanary-analyzer">
+    <CLASSES>
+      <root url="jar://D:/java/leakcanary/leadcanary-analyzer/bin/leadcanary-analyzer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://D:/java/leakcanary/leadcanary-analyzer/leadcanary-analyzer.iml" filepath="D:/java/leakcanary/leadcanary-analyzer/leadcanary-analyzer.iml" />
+      <module fileurl="file://D:/java/leakcanary/leadcanary-android/leadcanary-android.iml" filepath="D:/java/leakcanary/leadcanary-android/leadcanary-android.iml" />
+      <module fileurl="file://D:/java/leakcanary/leadcanary-watcher/leadcanary-watcher.iml" filepath="D:/java/leakcanary/leadcanary-watcher/leadcanary-watcher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leakcanary.iml" filepath="$PROJECT_DIR$/leakcanary.iml" />
+    </modules>
+  </component>
+</project>
+

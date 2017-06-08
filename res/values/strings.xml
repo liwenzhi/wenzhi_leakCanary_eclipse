@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">leakcanary</string>
+
+    <string name="skip_splash_activity">跳过</string>
+</resources>
