@@ -1,1 +1,111 @@
-This file was created by IntelliJ IDEA 12.1.7 for binding GitHub repository
+#Android程序内存测试框架leakcanary的使用
+
+目前能测试Android程序内存泄漏情况的方法，一个是使用Studio的开发工具自带的检查功能，如果不使用Studio可以使用leakcanary这个框架，也是目前最叼的框架。网上很多使用示例都是使用Studio开发的，需要远程依赖，我这个是使用IDEA开发的（工作目录和Eclipse一样），把三个lib项目工程导入，并依赖就可以使用框架的类来监听内存泄漏情况了。
+
+
+使用leakcanary框架后，你程序中页面存在内存泄漏，它会弹出通知提醒你，哪个页面泄漏多少内存，以及泄漏内存的原因。
+
+
+程序泄漏，图解：
+
+![1](http://i.imgur.com/w1LZJ6v.png)
+
+
+#leakcanary的使用：
+##1.导入3个项目工程，并依赖这三个项目工程
+具体的看我的项目代码
+##2.在AndroidManifest中注册项目工程中用到的一个Activity和两个Service。
+
+```
+  <activity android:name="com.squareup.leakcanary.internal.DisplayLeakActivity"/>
+
+
+        <service android:name="com.squareup.leakcanary.DisplayLeakService"
+                 android:enabled="false"
+                />
+        <service android:name="com.squareup.leakcanary.internal.HeapAnalyzerService"
+                 android:enabled="false"
+                 android:process=":leakcanary"
+                />
+```
+
+##3.在Application中注册框架
+```
+   private static APP instance;
+
+    private RefWatcher mRefWatcher;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        //注册内存框架
+        instance = this;
+//
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        
+        mRefWatcher = LeakCanary.install(this);
+    }
+
+
+    public static APP getAppIntance() {
+        return instance;
+    }
+
+
+    
+
+    public RefWatcher getRefWatcher() {
+        return mRefWatcher;
+    }
+
+
+```
+
+
+##4.在任意的Activity中监听，也可以在BaseActivity中实现监听每一个Activity
+```
+/**
+ * 内存泄漏测试
+ */
+public class MyActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+
+        //监听泄漏
+        RefWatcher refWatcher = APP.getAppIntance().getRefWatcher();
+        if (refWatcher != null) {
+            refWatcher.watch(this, "MyActivity");
+        }
+    }
+
+。。。
+
+}
+
+```
+对于Fragment也是可以这样监听，传入的this是一个对象，并非上下文，这里就可以监听整个MyActivity中的内存泄漏情况！
+
+项目中的源码（包含类库）：https://github.com/liwenzhi/wenzhi_leakCanary_eclipse/tree/master
+
+下面是我的一个程序的运行情况，是一个启动页面的设计效果：
+
+
+![3](http://i.imgur.com/Z2oNgaU.gif)
+
+一个启动页面居然会泄漏1.5M 的内存！一般的程序上线都是需要经过各种检测的，内存检测也是其中一个很重要的部分。
+
+#Android内存泄漏的几种情况：
+1.单例模式
+2.Handler的生命周期与Activity不一致
+3.线程的使用
+4.数据库、读写流没有释放
+5.不断new出的对象没有及时释放等等
+
+
+共勉：你可以改变自己，改变世界！
